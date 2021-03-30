@@ -3,15 +3,15 @@ import gzip
 import numpy as np
 
 
-def load_mnist(path, kind='train'):
+def load_mnist(path, label_suffix, img_suffix, kind):
 
     """Load MNIST data from `path`"""
     labels_path = os.path.join(path,
-                               '%s-labels-idx1-ubyte.gz'
-                               % kind)
+                               '%s-%s'
+                               % (kind, label_suffix))
     images_path = os.path.join(path,
-                               '%s-images-idx3-ubyte.gz'
-                               % kind)
+                               '%s-%s'
+                               % (kind, img_suffix))
 
     with gzip.open(labels_path, 'rb') as lbpath:
         labels = np.frombuffer(lbpath.read(), dtype=np.uint8,

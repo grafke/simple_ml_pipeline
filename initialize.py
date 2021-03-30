@@ -15,6 +15,11 @@ import logging.config
 logging.config.dictConfig(LOGGING)
 logger = logging.getLogger('app')
 
+LABEL_SUFFIX = 'labels-idx1-ubyte.gz'
+IMG_SUFFIX = 'images-idx3-ubyte.gz'
+TRAIN_PREFIX = 'train'
+TEST_PREFIX = 't10k'
+
 
 def create_folders():
     logger.info("Creating directories")
@@ -24,22 +29,28 @@ def create_folders():
     MESSAGES_PATH.mkdir(exist_ok=True)
 
 
-def fashion_mnist_data():
-    x_train, y_train = mnist_reader.load_mnist(DATA_PATH, kind='train')
-    x_test, y_test = mnist_reader.load_mnist(DATA_PATH, kind='t10k')
+def mnist_data(path,
+               label_suffix,
+               img_suffix,
+               train_prefix,
+               test_prefix):
+    x_train, y_train = mnist_reader.load_mnist(path, label_suffix=label_suffix, img_suffix=img_suffix,
+                                               kind=train_prefix)
+    x_test, y_test = mnist_reader.load_mnist(path, label_suffix=label_suffix, img_suffix=img_suffix, kind=test_prefix)
 
-    # -- Change type
     x_train = x_train.astype('float32')
     x_test = x_test.astype('float32')
 
-    # -- Normalize
     x_train /= 255
     x_test /= 255
 
-    # -- Change results to category one hot
     y_train = to_categorical(y_train, 10)
     y_test = to_categorical(y_test, 10)
 
+    return datasets(x_train, y_train, x_test, y_test)
+
+
+def datasets(x_train, y_train, x_test, y_test):
     return {'train_data': x_train,
             'train_labels': y_train,
             'test_data': x_test,
@@ -100,5 +111,9 @@ def plot_accuracy(hist):
 
 if __name__ == '__main__':
     create_folders()
-    data = fashion_mnist_data()
+    data = mnist_data(DATA_PATH,
+                      label_suffix=LABEL_SUFFIX,
+                      img_suffix=IMG_SUFFIX,
+                      train_prefix=TRAIN_PREFIX,
+                      test_prefix=TEST_PREFIX)
     train_model(data)

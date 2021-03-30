@@ -11,7 +11,10 @@ import logging.config
 logging.config.dictConfig(LOGGING)
 logger = logging.getLogger('app')
 
-x_test, y_test = mnist_reader.load_mnist(DATA_PATH, kind='t10k')
+LABEL_SUFFIX = 'labels-idx1-ubyte.gz'
+IMG_SUFFIX = 'images-idx3-ubyte.gz'
+TEST_PREFIX = 't10k'
+x_test, y_test = mnist_reader.load_mnist(DATA_PATH, label_suffix=LABEL_SUFFIX, img_suffix=IMG_SUFFIX, kind=TEST_PREFIX)
 messages = x_test
 
 

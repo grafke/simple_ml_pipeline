@@ -1,0 +1,12 @@
+version: "3.9"
+services:
+  producer:
+    build:
+      context: .
+      network: host
+      dockerfile: Dockerfile.producer
+  consumer:
+    build:
+      context: .
+      network: host
+      dockerfile: Dockerfile.consumer

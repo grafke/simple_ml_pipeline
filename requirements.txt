@@ -1,0 +1,5 @@
+kafka-python
+numpy
+keras
+tensorflow
+google-cloud-pubsub

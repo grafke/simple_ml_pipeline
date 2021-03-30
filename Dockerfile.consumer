@@ -1,0 +1,17 @@
+FROM python:3.8
+
+COPY requirements_consumer.txt requirements.txt
+RUN pip install --upgrade pip
+RUN pip install -r requirements.txt
+
+WORKDIR /home/app
+
+COPY config config/
+COPY messaging messaging/
+COPY resources resources/
+COPY utils utils/
+COPY consumer.py .
+
+ENV GOOGLE_APPLICATION_CREDENTIALS="resources/grf-dev-864bc7a335e5.json"
+
+CMD ["python", "consumer.py"]

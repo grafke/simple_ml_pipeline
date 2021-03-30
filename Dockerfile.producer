@@ -1,0 +1,18 @@
+FROM python:3.8
+
+COPY requirements_producer.txt requirements.txt
+RUN pip install --upgrade pip
+RUN pip install -r requirements.txt
+
+WORKDIR /home/app
+
+COPY config config/
+COPY messaging messaging/
+COPY resources resources/
+COPY utils utils/
+COPY producer.py .
+
+ENV GOOGLE_APPLICATION_CREDENTIALS="resources/grf-dev-864bc7a335e5.json"
+
+
+CMD ["python", "producer.py"]
